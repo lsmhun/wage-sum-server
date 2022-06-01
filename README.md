@@ -9,3 +9,5 @@ docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i 
 ```
 
 https://medium.com/@ankur_anand/how-to-mock-in-your-go-golang-tests-b9eee7d7c266
+
+https://nathanleclaire.com/blog/2014/02/15/how-to-wait-for-all-goroutines-to-finish-executing-before-continuing/ 

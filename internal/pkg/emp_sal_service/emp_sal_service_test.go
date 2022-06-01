@@ -1,6 +1,7 @@
 package empsalservice
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
@@ -76,6 +77,7 @@ func TestGetSumSalariesByMgrId(t *testing.T) {
 
 	// perform test
 	actual := GetSumSalariesByMgrId(1)
+	fmt.Printf("actual=%d", actual)
 	expected = decimal.NewFromInt(1 + 2 + 3 + 4)
 	assert.Equal(t, expected, actual)
 	/*
