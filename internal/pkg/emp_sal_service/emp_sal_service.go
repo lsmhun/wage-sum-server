@@ -1,7 +1,6 @@
 package empsalservice
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/lsmhun/wage-sum-server/internal/pkg/db"
@@ -42,64 +41,46 @@ func GetSalaryByEmpId(empId int64) decimal.Decimal {
 func GetSumSalariesByMgrId(mgrId int64) decimal.Decimal {
 	var wg sync.WaitGroup
 
-	//var salChannel chan decimal.Decimal
-
-	//var workChannel chan bool
-	//var resChannel chan decimal.Decimal
-
 	salChannel := make(chan decimal.Decimal)
 	// unbuffered channel
 	resChannel := make(chan decimal.Decimal, 1)
+	// init with zero sum
+	resChannel <- decimal.NewFromInt(0)
 
-	fmt.Printf("root wg.add(1)\n")
-	wg.Add(1)
-	go getSumSalariesByMgrIdRec(mgrId, salChannel, resChannel, wg)
+	// pass a pointer to the WaitGroup, otherwise it won't work
+	getSumSalariesByMgrIdRec(mgrId, salChannel, &wg)
+	// we have to wait until all salaries are collected
+	go func() {
+		wg.Wait()
+		close(salChannel)
+	}()
+	// summarizing the salary channel, it can be solved with a mutex as well
+	for sallll := range salChannel {
+		current := <-resChannel
+		current = current.Add(sallll)
+		resChannel <- current
+	}
 
-	/*go func() {
-		for i := range salChannel {
-			fmt.Println(i)
-		}
-	}()*/
-	wg.Wait()
-	//wg.Add(1)
-	sumSalaryForEmployee(salChannel, resChannel, wg)
-	//res := <-resChannel
-	//fmt.Printf("result %d", res)
-	return decimal.NewFromInt(11)
+	res := <-resChannel
+	return res
 }
 
 // Producer
-func addSalaryForEmployee(empId int64, salChannel chan<- decimal.Decimal, wg sync.WaitGroup) {
+func addSalaryForEmployee(empId int64, salChannel chan decimal.Decimal, wg *sync.WaitGroup) {
 	defer wg.Done()
-	fmt.Printf("addSalaryForEmployee Writing into salChannel %d \n", empId)
+	//add salary for employee writing into salChannel
 	salChannel <- GetSalaryByEmpId(empId)
 }
 
-// Consumer
-func sumSalaryForEmployee(salChannel <-chan decimal.Decimal, res chan decimal.Decimal, wg sync.WaitGroup) {
-	//defer wg.Done()
-	fmt.Printf(" salChannel size: %d \n", cap(salChannel))
-	for sal := range salChannel {
-		current := <-res
-		fmt.Printf("Working with res channel %d \n", current.BigInt().Uint64())
-		current = current.Add(sal)
-		res <- current
-	}
-}
-
-func getSumSalariesByMgrIdRec(mgrId int64, salChannel chan decimal.Decimal, res chan decimal.Decimal, wg sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Printf("getSumSalariesByMgrIdRec Writing into mgrId %d \n", mgrId)
+func getSumSalariesByMgrIdRec(mgrId int64, salChannel chan decimal.Decimal, wg *sync.WaitGroup) {
 	var employees []openapi.Emp = salaryDB.FindEmployeesByMgrId(mgrId)
 	for _, emp := range employees {
 		if emp.Status == "ACTIVE" {
-			fmt.Printf("mgr wg.add(1)\n")
 			wg.Add(1) // one for produce, one for consume
 			go addSalaryForEmployee(emp.EmpId, salChannel, wg)
 			if emp.Type == "MANAGER" {
-				wg.Add(1)
-				fmt.Printf("sal wg.add(1)\n")
-				go getSumSalariesByMgrIdRec(emp.EmpId, salChannel, res, wg)
+				// this won't be a goroutin
+				getSumSalariesByMgrIdRec(emp.EmpId, salChannel, wg)
 			}
 		}
 	}

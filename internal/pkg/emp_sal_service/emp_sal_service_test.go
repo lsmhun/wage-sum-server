@@ -60,16 +60,16 @@ func TestGetSumSalariesByMgrId(t *testing.T) {
 	}
 
 	findEmployeesByMgrIdMock = func(mgrId int64) []openapi.Emp {
-		empBoss := openapi.Emp{EmpId: 1, Status: "ACTIVE", Type: "MANAGER"}
+		//empBoss := openapi.Emp{EmpId: 1, Status: "ACTIVE", Type: "MANAGER"}
 		empManager1 := openapi.Emp{EmpId: 2, MgrId: 1, Status: "ACTIVE", Type: "MANAGER"}
 		empClerk1 := openapi.Emp{EmpId: 3, MgrId: 2, Status: "ACTIVE", Type: "EMPLOYEE"}
 		empManager2 := openapi.Emp{EmpId: 4, MgrId: 1, Status: "ACTIVE", Type: "MANAGER"}
-		employees := [4]openapi.Emp{empBoss, empManager1, empClerk1, empManager2}
+		//employees := [4]openapi.Emp{empBoss, empManager1, empClerk1, empManager2}
 		switch mgrId {
 		case 1:
 			return []openapi.Emp{empManager1, empManager2}
 		case 2:
-			return employees[2:2]
+			return []openapi.Emp{empClerk1}
 		default:
 			return []openapi.Emp{}
 		}
@@ -78,15 +78,15 @@ func TestGetSumSalariesByMgrId(t *testing.T) {
 	// perform test
 	actual := GetSumSalariesByMgrId(1)
 	fmt.Printf("actual=%d", actual)
-	expected = decimal.NewFromInt(1 + 2 + 3 + 4)
+	expected = decimal.NewFromInt(2 + 3 + 4)
 	assert.Equal(t, expected, actual)
-	/*
-		actual = GetSumSalariesByMgrId(2)
-		expected = decimal.NewFromInt(2 + 3)
-		assert.Equal(t, expected, actual)
 
-		actual = GetSumSalariesByMgrId(4)
-		expected = decimal.NewFromInt(4)
-		assert.Equal(t, expected, actual)
-	*/
+	actual = GetSumSalariesByMgrId(2)
+	expected = decimal.NewFromInt(3)
+	assert.Equal(t, expected, actual)
+
+	actual = GetSumSalariesByMgrId(4)
+	expected = decimal.NewFromInt(0)
+	assert.Equal(t, expected, actual)
+
 }
