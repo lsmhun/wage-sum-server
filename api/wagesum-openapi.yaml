@@ -8,8 +8,8 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
-servers:
-- url: https://wagesum.org/v1
+#servers:
+#- url: https://wagesum.org/v1
 tags:
 - name: emp
   description: Everything about employee
@@ -17,7 +17,7 @@ tags:
     description: Find out more
     url: http://swagger.io
 paths:
-   /emp/{empId}:
+   /api/v1/emp/{empId}:
     get:
       tags:
       - emp
@@ -57,20 +57,23 @@ components:
       properties:
         id:
           type: integer
-          format: int32
+          format: int64
         empId:
           type: integer
-          format: int32
+          format: int64
         firstName:
           type: string
         lastName:
           type: string
         mgrId:
           type: integer
-          format: int32
-        shipDate:
+          format: int64
+        type:
           type: string
-          format: date-time
+          description: Employee Type
+          enum:
+          - MANAGER
+          - EMPLOYEE
         status:
           type: string
           description: Employee Status

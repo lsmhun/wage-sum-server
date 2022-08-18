@@ -12,9 +12,7 @@ package openapi
 
 import (
 	"context"
-	"errors"
-	"net/http"
-	//"github.com/lsmhun/wage-sum-server/internal/openapi"
+	//"net/http"
 )
 
 // EmpApiService is a service that implements the logic for the EmpApiServicer
@@ -29,7 +27,7 @@ func NewEmpApiService() EmpApiServicer {
 }
 
 // GetEmpById - Find employee by ID
-func (s *EmpApiService) GetEmpById(ctx context.Context, empId int64) (ImplResponse, error) {
+func (s *EmpApiService) GetEmpById(ctx context.Context, empId int32) (ImplResponse, error) {
 	// TODO - update GetEmpById with the required logic for this service method.
 	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -40,7 +38,14 @@ func (s *EmpApiService) GetEmpById(ctx context.Context, empId int64) (ImplRespon
 	//return Response(400, nil),nil
 
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
+	return Response(404, nil), nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("GetEmpById method not implemented")
+	//return Response(http.StatusNotImplemented, nil), errors.New("GetEmpById method not implemented")
+	/*empById, err := empdb.FindEmployeeById(empId)
+	if err != nil {
+		return Response(200, empById), nil
+	}
+	// todo: better error handling
+	return Response(http.StatusInternalServerError, nil), err
+	*/
 }

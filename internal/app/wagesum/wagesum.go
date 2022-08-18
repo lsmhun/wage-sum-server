@@ -1,21 +1,31 @@
 package wagesumapp
 
 import (
-	"fmt"
 	"log"
-	//"net/http"
-	//"github.com/lsmhun/wage-sum-server/internal/pkg/swagger"
+	"net/http"
+
+	myConfig "github.com/lsmhun/wage-sum-server/internal/pkg/configuration"
+	oa "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
 )
 
 func WageSumApp() {
-	fmt.Println("Wagesum app started")
 	startServer()
 }
 
 func startServer() {
-	log.Printf("Server started")
+	listeningHttpPort := myConfig.GetConfigValue("wagesum.http.service.port")
+	log.Printf("WageSum HTTP Server is starting on port :%s ...", listeningHttpPort)
 
-	//router := swagger.NewRouter()
+	// registering new controllers
+	router := oa.NewRouter(
+		empApiController(),
+	)
+	log.Fatal(http.ListenAndServe(":"+listeningHttpPort, router))
 
-	//log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+func empApiController() oa.Router {
+	empApiService := oa.NewEmpApiService()
+	empApiController := oa.NewEmpApiController(empApiService)
+	return empApiController
 }

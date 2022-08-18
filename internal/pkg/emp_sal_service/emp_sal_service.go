@@ -3,9 +3,9 @@ package empsalservice
 import (
 	"sync"
 
-	"github.com/lsmhun/wage-sum-server/internal/pkg/db"
+	slog "github.com/go-eden/slf4go"
+	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
 	"github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
-
 	"github.com/shopspring/decimal"
 )
 
@@ -39,6 +39,7 @@ func GetSalaryByEmpId(empId int64) decimal.Decimal {
 }
 
 func GetSumSalariesByMgrId(mgrId int64) decimal.Decimal {
+	slog.Debugf("GetSumSalariesByMgrId mgrId= %d", mgrId)
 	var wg sync.WaitGroup
 
 	salChannel := make(chan decimal.Decimal)

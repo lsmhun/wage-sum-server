@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	wagesumapp "github.com/lsmhun/wage-sum-server/internal/app/wagesum"
 )
 
 func main() {
-	fmt.Println("Hi")
+	log.Println("WageSum application")
 	wagesumapp.WageSumApp()
 }

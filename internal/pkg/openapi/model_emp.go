@@ -10,11 +10,8 @@
 
 package openapi
 
-import (
-	"time"
-)
-
 type Emp struct {
+
 	Id int64 `json:"id,omitempty"`
 
 	EmpId int64 `json:"empId,omitempty"`
@@ -25,13 +22,11 @@ type Emp struct {
 
 	MgrId int64 `json:"mgrId,omitempty"`
 
-	ShipDate time.Time `json:"shipDate,omitempty"`
+	// Employee Type
+	Type string `json:"type,omitempty"`
 
 	// Employee Status
 	Status string `json:"status,omitempty"`
-
-	// Employee Status
-	Type string `json:"type,omitempty"`
 }
 
 // AssertEmpRequired checks if the required fields are not zero-ed

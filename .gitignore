@@ -17,5 +17,17 @@
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
+# IDE files
+.vscode/
+.idea/
+
+
 # Dependency directories (remove the comment below to include it)
 vendor/
+
+# output directory
+out/
+
+# openapi working directory
+internal/pkg/.openapi-generator/
+internal/pkg/api/

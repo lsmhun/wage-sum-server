@@ -48,13 +48,13 @@ func NewEmpApiController(s EmpApiServicer, opts ...EmpApiOption) Router {
 	return controller
 }
 
-// Routes returns all of the api route for the EmpApiController
+// Routes returns all the api routes for the EmpApiController
 func (c *EmpApiController) Routes() Routes {
 	return Routes{
 		{
 			"GetEmpById",
 			strings.ToUpper("Get"),
-			"/v1/emp/{empId}",
+			"/api/v1/emp/{empId}",
 			c.GetEmpById,
 		},
 	}
@@ -63,7 +63,7 @@ func (c *EmpApiController) Routes() Routes {
 // GetEmpById - Find employee by ID
 func (c *EmpApiController) GetEmpById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	empIdParam, err := parseInt64Parameter(params["empId"], true)
+	empIdParam, err := parseInt32Parameter(params["empId"], true)
 	if err != nil {
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
 		return

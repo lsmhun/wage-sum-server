@@ -1,8 +1,11 @@
 package db
 
 import (
-	"github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
+	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
 )
+
+type EmpDb struct {
+}
 
 func FindEmployeeById(id int64) openapi.Emp {
 	return openapi.Emp{}
