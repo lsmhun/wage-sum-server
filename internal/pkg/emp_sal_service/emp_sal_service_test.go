@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
 
 	"github.com/shopspring/decimal"
-	"github.com/stretchr/testify/assert"
 )
 
 // This helps in assigning mock at the runtime instead of compile time

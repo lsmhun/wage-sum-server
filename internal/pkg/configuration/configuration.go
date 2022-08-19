@@ -23,6 +23,8 @@ func init() {
 	configMap["wagesum.db.host"] = "127.0.0.1"
 	configMap["wagesum.db.port"] = "5432"
 	configMap["wagesum.db.name"] = "wagesum"
+	configMap["wagesum.db.username"] = "postgres"
+	configMap["wagesum.db.password"] = "mysecretpassword"
 	configMap["wagesum.http.service.port"] = "3000"
 }
 

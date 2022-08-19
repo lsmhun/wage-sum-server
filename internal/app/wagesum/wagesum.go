@@ -5,7 +5,11 @@ import (
 	"net/http"
 
 	myConfig "github.com/lsmhun/wage-sum-server/internal/pkg/configuration"
-	oa "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
+	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
+	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
+	service "github.com/lsmhun/wage-sum-server/internal/pkg/service"
+
+	"gorm.io/gorm"
 )
 
 func WageSumApp() {
@@ -13,19 +17,35 @@ func WageSumApp() {
 }
 
 func startServer() {
+
+	database, errr := initializeDatabaseConnection()
+	empDbRepo := initEmpDb(database, errr)
+
 	listeningHttpPort := myConfig.GetConfigValue("wagesum.http.service.port")
 	log.Printf("WageSum HTTP Server is starting on port :%s ...", listeningHttpPort)
 
 	// registering new controllers
-	router := oa.NewRouter(
-		empApiController(),
+	router := openapi.NewRouter(
+		empApiController(empDbRepo),
 	)
 	log.Fatal(http.ListenAndServe(":"+listeningHttpPort, router))
 
 }
 
-func empApiController() oa.Router {
-	empApiService := oa.NewEmpApiService()
-	empApiController := oa.NewEmpApiController(empApiService)
+func initializeDatabaseConnection() (*gorm.DB, error) {
+	db, err := db.PostgresDatabaseSetup()
+	if err != nil {
+		panic("Unable to connect to database")
+	}
+	return db, err
+}
+
+func empApiController(empDB db.EmpDb) openapi.Router {
+	empApiService := service.NewEmpApiService(empDB)
+	empApiController := openapi.NewEmpApiController(empApiService)
 	return empApiController
+}
+
+func initEmpDb(database *gorm.DB, err error) db.EmpDb {
+	return db.NewEmpDb(database, err)
 }

@@ -2,15 +2,31 @@ package db
 
 import (
 	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
+	"gorm.io/gorm"
 )
 
 type EmpDb struct {
+	db  *gorm.DB
+	err error
 }
 
-func FindEmployeeById(id int64) openapi.Emp {
-	return openapi.Emp{}
+func NewEmpDb(database *gorm.DB, e error) EmpDb {
+	myEmpDB := EmpDb{
+		db:  database,
+		err: e,
+	}
+	// Migrate the schema
+	myEmpDB.db.AutoMigrate(&openapi.Emp{})
+	return myEmpDB
 }
 
-func FindEmployeesByMgrId(id int64) []openapi.Emp {
+func (d *EmpDb) FindEmployeeById(id int64) openapi.Emp {
+	var emp openapi.Emp
+	d.db.First(&emp, "empId = ?", id)
+	return emp
+	//return openapi.Emp{}
+}
+
+func (d *EmpDb) FindEmployeesByMgrId(id int64) []openapi.Emp {
 	return nil
 }

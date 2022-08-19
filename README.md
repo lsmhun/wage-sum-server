@@ -21,5 +21,14 @@ go mod tidy
 go mod vendor
 ```
 
+# DB
+https://medium.com/@rosaniline/unit-testing-gorm-with-go-sqlmock-in-go-93cbce1f6b5b
+
+```shell
+docker run -p 5432:5432 --name wagesum-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+```
+
+
 # Other
 https://towardsdev.com/golang-productivity-hacks-part-3-auto-generating-test-4c8055dc7946
+https://eli.thegreenplace.net/2021/rest-servers-in-go-part-4-using-openapi-and-swagger/
