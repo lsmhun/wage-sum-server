@@ -5,6 +5,11 @@ import (
 	"gorm.io/gorm"
 )
 
+type EmpDber interface {
+	FindEmployeeById(id int64) openapi.Emp
+	FindEmployeesByMgrId(id int64) []openapi.Emp
+}
+
 type EmpDb struct {
 	db  *gorm.DB
 	err error
