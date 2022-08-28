@@ -6,22 +6,29 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
-
 	"github.com/shopspring/decimal"
+
+	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
+	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
 )
 
 // This helps in assigning mock at the runtime instead of compile time
 var getSalaryByEmpIdMock func(empId int64) decimal.Decimal
 var findEmployeesByMgrIdMock func(mgrId int64) []openapi.Emp
 
-type salaryDbMock struct{}
+type salaryDbMock struct {
+	db.SalDb
+}
 
-func (s salaryDbMock) GetSalaryByEmpId(empId int64) decimal.Decimal {
+func (s *salaryDbMock) GetSalaryByEmpId(empId int64) decimal.Decimal {
 	return getSalaryByEmpIdMock(empId)
 }
 
-func (s salaryDbMock) FindEmployeesByMgrId(mgrId int64) []openapi.Emp {
+type empDbMock struct {
+	db.EmpDb
+}
+
+func (e *empDbMock) FindEmployeesByMgrId(mgrId int64) []openapi.Emp {
 	return findEmployeesByMgrIdMock(mgrId)
 }
 
@@ -33,19 +40,25 @@ func TestGetSalaryByEmpId(t *testing.T) {
 	var expected decimal.Decimal = decimal.NewFromFloat(3.0)
 
 	//mocking
-	salaryDB = salaryDbMock{}
 	getSalaryByEmpIdMock = func(empId int64) decimal.Decimal {
 		return decimal.NewFromFloat(3.0)
 	}
 
+	origSalDb := db.SalDb{}
+	tSalDb := &salaryDbMock{origSalDb}
+	origEmpDb := db.EmpDb{}
+	tEmpDb := &empDbMock{origEmpDb}
+	ess := NewEmpSalService(tEmpDb, tSalDb)
+
 	// perform test
-	actual := GetSalaryByEmpId(empId)
+	actual := ess.GetSalaryByEmpId(empId)
 
 	// assert that the actual result is equal to expected
 	assert.Equal(t, expected, actual)
 }
 
 func TestGetSumSalariesByMgrId(t *testing.T) {
+
 	//   Boss - id=1
 	//     Manager1 - id=2
 	//       Clerk1 - id=3
@@ -55,7 +68,6 @@ func TestGetSumSalariesByMgrId(t *testing.T) {
 	var expected decimal.Decimal = decimal.NewFromFloat(3.0)
 
 	//mocking
-	salaryDB = salaryDbMock{}
 	getSalaryByEmpIdMock = func(empId int64) decimal.Decimal {
 		return decimal.NewFromInt(empId)
 	}
@@ -76,17 +88,23 @@ func TestGetSumSalariesByMgrId(t *testing.T) {
 		}
 	}
 
+	origSalDb := db.SalDb{}
+	tSalDb := &salaryDbMock{origSalDb}
+	origEmpDb := db.EmpDb{}
+	tEmpDb := &empDbMock{origEmpDb}
+	ess := NewEmpSalService(tEmpDb, tSalDb)
+
 	// perform test
-	actual := GetSumSalariesByMgrId(1)
+	actual := ess.GetSumSalariesByMgrId(1)
 	fmt.Printf("actual=%d", actual)
 	expected = decimal.NewFromInt(2 + 3 + 4)
 	assert.Equal(t, expected, actual)
 
-	actual = GetSumSalariesByMgrId(2)
+	actual = ess.GetSumSalariesByMgrId(2)
 	expected = decimal.NewFromInt(3)
 	assert.Equal(t, expected, actual)
 
-	actual = GetSumSalariesByMgrId(4)
+	actual = ess.GetSumSalariesByMgrId(4)
 	expected = decimal.NewFromInt(0)
 	assert.Equal(t, expected, actual)
 

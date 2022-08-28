@@ -11,7 +11,7 @@ require (
 
 require (
 	github.com/go-eden/common v0.1.14 // indirect
-	github.com/go-eden/routine v0.0.1 // indirect
+	github.com/go-eden/routine v1.0.1 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.13.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect

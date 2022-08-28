@@ -27,7 +27,7 @@ func NewEmpDb(database *gorm.DB, e error) EmpDb {
 
 func (d *EmpDb) FindEmployeeById(id int64) openapi.Emp {
 	var emp openapi.Emp
-	d.db.First(&emp, "empId = ?", id)
+	d.db.First(&emp, "emp_id = ?", id)
 	return emp
 	//return openapi.Emp{}
 }

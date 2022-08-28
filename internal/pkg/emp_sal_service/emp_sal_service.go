@@ -9,36 +9,24 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// BEGIN: interface for hiding of direct DB
-
-type dbRepository interface {
-	GetSalaryByEmpId(empId int64) decimal.Decimal
-	FindEmployeesByMgrId(mgrId int64) []openapi.Emp
+type EmpSalService struct {
+	empDb    db.EmpDber
+	salaryDb db.SalDber
 }
 
-type salDB struct{}
-
-func (s salDB) GetSalaryByEmpId(empId int64) decimal.Decimal {
-	return db.GetSalaryByEmpId(empId)
+func NewEmpSalService(edb db.EmpDber, sdb db.SalDber) EmpSalService {
+	myEmpSalService := EmpSalService{
+		empDb:    edb,
+		salaryDb: sdb,
+	}
+	return myEmpSalService
 }
 
-func (s salDB) FindEmployeesByMgrId(mgrId int64) []openapi.Emp {
-	return nil //db.FindEmployeesByMgrId(mgrId)
+func (es *EmpSalService) GetSalaryByEmpId(empId int64) decimal.Decimal {
+	return es.salaryDb.GetSalaryByEmpId(empId)
 }
 
-// END: direct DB hiding
-
-var salaryDB dbRepository
-
-func init() {
-	salaryDB = salDB{}
-}
-
-func GetSalaryByEmpId(empId int64) decimal.Decimal {
-	return salaryDB.GetSalaryByEmpId(empId)
-}
-
-func GetSumSalariesByMgrId(mgrId int64) decimal.Decimal {
+func (es *EmpSalService) GetSumSalariesByMgrId(mgrId int64) decimal.Decimal {
 	slog.Debugf("GetSumSalariesByMgrId mgrId= %d", mgrId)
 	var wg sync.WaitGroup
 
@@ -49,7 +37,7 @@ func GetSumSalariesByMgrId(mgrId int64) decimal.Decimal {
 	resChannel <- decimal.NewFromInt(0)
 
 	// pass a pointer to the WaitGroup, otherwise it won't work
-	getSumSalariesByMgrIdRec(mgrId, salChannel, &wg)
+	es.getSumSalariesByMgrIdRec(mgrId, salChannel, &wg)
 	// we have to wait until all salaries are collected
 	go func() {
 		wg.Wait()
@@ -67,21 +55,21 @@ func GetSumSalariesByMgrId(mgrId int64) decimal.Decimal {
 }
 
 // Producer
-func addSalaryForEmployee(empId int64, salChannel chan decimal.Decimal, wg *sync.WaitGroup) {
+func (es *EmpSalService) addSalaryForEmployee(empId int64, salChannel chan decimal.Decimal, wg *sync.WaitGroup) {
 	defer wg.Done()
 	//add salary for employee writing into salChannel
-	salChannel <- GetSalaryByEmpId(empId)
+	salChannel <- es.GetSalaryByEmpId(empId)
 }
 
-func getSumSalariesByMgrIdRec(mgrId int64, salChannel chan decimal.Decimal, wg *sync.WaitGroup) {
-	var employees []openapi.Emp = salaryDB.FindEmployeesByMgrId(mgrId)
+func (es *EmpSalService) getSumSalariesByMgrIdRec(mgrId int64, salChannel chan decimal.Decimal, wg *sync.WaitGroup) {
+	var employees []openapi.Emp = es.empDb.FindEmployeesByMgrId(mgrId)
 	for _, emp := range employees {
 		if emp.Status == "ACTIVE" {
 			wg.Add(1) // one for produce, one for consume
-			go addSalaryForEmployee(emp.EmpId, salChannel, wg)
+			go es.addSalaryForEmployee(emp.EmpId, salChannel, wg)
 			if emp.Type == "MANAGER" {
 				// this won't be a goroutin
-				getSumSalariesByMgrIdRec(emp.EmpId, salChannel, wg)
+				es.getSumSalariesByMgrIdRec(emp.EmpId, salChannel, wg)
 			}
 		}
 	}
