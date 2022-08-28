@@ -32,3 +32,7 @@ docker run -p 5432:5432 --name wagesum-postgres -e POSTGRES_PASSWORD=mysecretpas
 # Other
 https://towardsdev.com/golang-productivity-hacks-part-3-auto-generating-test-4c8055dc7946
 https://eli.thegreenplace.net/2021/rest-servers-in-go-part-4-using-openapi-and-swagger/
+
+https://stackoverflow.com/questions/7106012/download-a-single-folder-or-directory-from-a-github-repo
+
+https://ribice.medium.com/serve-swaggerui-within-your-golang-application-5486748a5ed4

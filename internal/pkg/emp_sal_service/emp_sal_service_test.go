@@ -12,10 +12,13 @@ import (
 	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
 )
 
+// TODO: refactor manual mocking
+
 // This helps in assigning mock at the runtime instead of compile time
 var getSalaryByEmpIdMock func(empId int64) decimal.Decimal
 var findEmployeesByMgrIdMock func(mgrId int64) []openapi.Emp
 
+// Mocking salaryDB
 type salaryDbMock struct {
 	db.SalDb
 }
@@ -24,13 +27,37 @@ func (s *salaryDbMock) GetSalaryByEmpId(empId int64) decimal.Decimal {
 	return getSalaryByEmpIdMock(empId)
 }
 
+func (s *salaryDbMock) DeleteByEmpId(empId int64) (db.Sal, error) {
+	return db.Sal{}, nil
+}
+func (s *salaryDbMock) CreateOrUpdateSalary(empId int64, value decimal.Decimal) (db.Sal, error) {
+	return db.Sal{}, nil
+}
+
+// Mocking employeeDB
 type empDbMock struct {
 	db.EmpDb
 }
 
-func (e *empDbMock) FindEmployeesByMgrId(mgrId int64) []openapi.Emp {
-	return findEmployeesByMgrIdMock(mgrId)
+func (e *empDbMock) FindEmployeeById(empId int64) (openapi.Emp, error) {
+	return openapi.Emp{}, nil
 }
+
+func (e *empDbMock) FindEmployeesByMgrId(mgrId int64) ([]openapi.Emp, error) {
+	return findEmployeesByMgrIdMock(mgrId), nil
+}
+
+func (e *empDbMock) FindEmployeesByType(empType string) ([]openapi.Emp, error) {
+	return []openapi.Emp{}, nil
+}
+func (e *empDbMock) CreateOrUpdateEmp(emp openapi.Emp) (openapi.Emp, error) {
+	return openapi.Emp{}, nil
+}
+func (e *empDbMock) DeleteEmp(empId int64) (openapi.Emp, error) {
+	return openapi.Emp{}, nil
+}
+
+// END mocking
 
 func TestGetSalaryByEmpId(t *testing.T) {
 	// define inputs

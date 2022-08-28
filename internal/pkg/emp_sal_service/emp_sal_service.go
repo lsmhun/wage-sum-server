@@ -5,13 +5,15 @@ import (
 
 	slog "github.com/go-eden/slf4go"
 	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
-	"github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
 	"github.com/shopspring/decimal"
 )
 
 type EmpSalService struct {
 	empDb    db.EmpDber
 	salaryDb db.SalDber
+}
+
+type EmpSalServicer interface {
 }
 
 func NewEmpSalService(edb db.EmpDber, sdb db.SalDber) EmpSalService {
@@ -62,14 +64,16 @@ func (es *EmpSalService) addSalaryForEmployee(empId int64, salChannel chan decim
 }
 
 func (es *EmpSalService) getSumSalariesByMgrIdRec(mgrId int64, salChannel chan decimal.Decimal, wg *sync.WaitGroup) {
-	var employees []openapi.Emp = es.empDb.FindEmployeesByMgrId(mgrId)
-	for _, emp := range employees {
-		if emp.Status == "ACTIVE" {
-			wg.Add(1) // one for produce, one for consume
-			go es.addSalaryForEmployee(emp.EmpId, salChannel, wg)
-			if emp.Type == "MANAGER" {
-				// this won't be a goroutin
-				es.getSumSalariesByMgrIdRec(emp.EmpId, salChannel, wg)
+	var employees, err1 = es.empDb.FindEmployeesByMgrId(mgrId)
+	if err1 == nil {
+		for _, emp := range employees {
+			if emp.Status == "ACTIVE" {
+				wg.Add(1) // one for produce, one for consume
+				go es.addSalaryForEmployee(emp.EmpId, salChannel, wg)
+				if emp.Type == "MANAGER" {
+					// this won't be a goroutin
+					es.getSumSalariesByMgrIdRec(emp.EmpId, salChannel, wg)
+				}
 			}
 		}
 	}

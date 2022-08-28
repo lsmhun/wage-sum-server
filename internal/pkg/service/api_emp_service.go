@@ -17,6 +17,7 @@ import (
 
 	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
 	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
+	"gorm.io/gorm"
 )
 
 // EmpApiService is a service that implements the logic for the EmpApiServicer
@@ -35,29 +36,15 @@ func NewEmpApiService(e db.EmpDb) openapi.EmpApiServicer {
 
 // GetEmpById - Find employee by ID
 func (s *EmpApiService) GetEmpById(ctx context.Context, empId int64) (openapi.ImplResponse, error) {
-	// TODO - update GetEmpById with the required logic for this service method.
-	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response openapi.Response(200, Emp{}) or use other options such as http.Ok ...
-	//return openapi.Response(200, Emp{}), nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
-	//return openapi.Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(404, {}) or use other options such as http.Ok ...
-	//return openapi.openapi.Response(404, nil), nil
-
-	//return openapi.Response(http.StatusNotImplemented, nil), errors.New("GetEmpById method not implemented")
-	//empById, err := db.FindEmployeeById(empId)
-	//if err != nil {
-	//	return openapi.openapi.Response(200, empById), nil
-	//}
-	// todo: better error handling
-	//return openapi.openapi.Response(http.StatusInternalServerError, nil), err
-
-	// todo: error handling
-	empById := s.empDb.FindEmployeeById(empId)
-	return openapi.Response(200, empById), nil
+	empById, err := s.empDb.FindEmployeeById(empId)
+	if err == nil {
+		return openapi.Response(200, empById), nil
+	} else {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return openapi.Response(404, nil), nil
+		}
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
 }
 
 // AddEmp - Add a new emp to the store
@@ -76,13 +63,11 @@ func (s *EmpApiService) AddEmp(ctx context.Context, emp openapi.Emp) (openapi.Im
 
 // DeleteEmp - Deletes a emp
 func (s *EmpApiService) DeleteEmp(ctx context.Context, empId int64, apiKey string) (openapi.ImplResponse, error) {
-	// TODO - update DeleteEmp with the required logic for this service method.
-	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
-	//return openapi.Response(400, nil),nil
-
-	return openapi.Response(http.StatusNotImplemented, nil), errors.New("DeleteEmp method not implemented")
+	_, err := s.empDb.DeleteEmp(empId)
+	if err != nil {
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+	return openapi.Response(200, empId), nil
 }
 
 // FindEmpsByType - Finds emps by type
@@ -101,22 +86,12 @@ func (s *EmpApiService) FindEmpsByType(ctx context.Context, type_ string) (opena
 
 // UpdateEmp - Update an existing emp
 func (s *EmpApiService) UpdateEmp(ctx context.Context, emp openapi.Emp) (openapi.ImplResponse, error) {
-	// TODO - update UpdateEmp with the required logic for this service method.
-	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response openapi.Response(200, Emp{}) or use other options such as http.Ok ...
-	//return openapi.Response(200, Emp{}), nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
-	//return openapi.Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(404, {}) or use other options such as http.Ok ...
-	//return openapi.Response(404, nil),nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(405, {}) or use other options such as http.Ok ...
-	//return openapi.Response(405, nil),nil
-
-	return openapi.Response(http.StatusNotImplemented, nil), errors.New("UpdateEmp method not implemented")
+	empById, err := s.empDb.CreateOrUpdateEmp(emp)
+	if err == nil {
+		return openapi.Response(200, empById), nil
+	} else {
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
 }
 
 // UpdateEmpWithForm - Updates a emp in the store with form data

@@ -15,18 +15,26 @@ import (
 	"errors"
 	"net/http"
 
+	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
 	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
+
+	empSalService "github.com/lsmhun/wage-sum-server/internal/pkg/emp_sal_service"
 )
 
 // SalApiService is a service that implements the logic for the SalApiServicer
 // This service should implement the business logic for every endpoint for the SalApi API.
 // Include any external packages or services that will be required by this service.
 type SalApiService struct {
+	salDb         db.SalDber
+	empSalService empSalService.EmpSalService
 }
 
 // NewSalApiService creates a default api service
-func NewSalApiService() openapi.SalApiServicer {
-	return &SalApiService{}
+func NewSalApiService(s db.SalDb, es empSalService.EmpSalService) openapi.SalApiServicer {
+	return &SalApiService{
+		salDb:         &s,
+		empSalService: es,
+	}
 }
 
 // GetSalByEmpId - Find sal by ID
