@@ -12,6 +12,8 @@ package service
 
 import (
 	"context"
+	"errors"
+	"net/http"
 
 	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
 	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
@@ -32,28 +34,98 @@ func NewEmpApiService(e db.EmpDb) openapi.EmpApiServicer {
 }
 
 // GetEmpById - Find employee by ID
-func (s *EmpApiService) GetEmpById(ctx context.Context, empId int32) (openapi.ImplResponse, error) {
+func (s *EmpApiService) GetEmpById(ctx context.Context, empId int64) (openapi.ImplResponse, error) {
 	// TODO - update GetEmpById with the required logic for this service method.
 	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
-	//TODO: Uncomment the next line to return response Response(200, Emp{}) or use other options such as http.Ok ...
-	//return Response(200, Emp{}), nil
+	//TODO: Uncomment the next line to return response openapi.Response(200, Emp{}) or use other options such as http.Ok ...
+	//return openapi.Response(200, Emp{}), nil
 
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
+	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
+	//return openapi.Response(400, nil),nil
 
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return openapi.Response(404, nil), nil
+	//TODO: Uncomment the next line to return response openapi.Response(404, {}) or use other options such as http.Ok ...
+	//return openapi.openapi.Response(404, nil), nil
 
-	//return Response(http.StatusNotImplemented, nil), errors.New("GetEmpById method not implemented")
+	//return openapi.Response(http.StatusNotImplemented, nil), errors.New("GetEmpById method not implemented")
 	//empById, err := db.FindEmployeeById(empId)
 	//if err != nil {
-	//	return openapi.Response(200, empById), nil
+	//	return openapi.openapi.Response(200, empById), nil
 	//}
 	// todo: better error handling
-	//return openapi.Response(http.StatusInternalServerError, nil), err
+	//return openapi.openapi.Response(http.StatusInternalServerError, nil), err
 
 	// todo: error handling
-	empById := s.empDb.FindEmployeeById(int64(empId))
+	empById := s.empDb.FindEmployeeById(empId)
 	return openapi.Response(200, empById), nil
+}
+
+// AddEmp - Add a new emp to the store
+func (s *EmpApiService) AddEmp(ctx context.Context, emp openapi.Emp) (openapi.ImplResponse, error) {
+	// TODO - update AddEmp with the required logic for this service method.
+	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+
+	//TODO: Uncomment the next line to return response openapi.Response(200, Emp{}) or use other options such as http.Ok ...
+	//return openapi.Response(200, Emp{}), nil
+
+	//TODO: Uncomment the next line to return response openapi.Response(405, {}) or use other options such as http.Ok ...
+	//return openapi.Response(405, nil),nil
+
+	return openapi.Response(http.StatusNotImplemented, nil), errors.New("AddEmp method not implemented")
+}
+
+// DeleteEmp - Deletes a emp
+func (s *EmpApiService) DeleteEmp(ctx context.Context, empId int64, apiKey string) (openapi.ImplResponse, error) {
+	// TODO - update DeleteEmp with the required logic for this service method.
+	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+
+	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
+	//return openapi.Response(400, nil),nil
+
+	return openapi.Response(http.StatusNotImplemented, nil), errors.New("DeleteEmp method not implemented")
+}
+
+// FindEmpsByType - Finds emps by type
+func (s *EmpApiService) FindEmpsByType(ctx context.Context, type_ string) (openapi.ImplResponse, error) {
+	// TODO - update FindEmpsByType with the required logic for this service method.
+	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+
+	//TODO: Uncomment the next line to return response openapi.Response(200, []Emp{}) or use other options such as http.Ok ...
+	//return openapi.Response(200, []Emp{}), nil
+
+	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
+	//return openapi.Response(400, nil),nil
+
+	return openapi.Response(http.StatusNotImplemented, nil), errors.New("FindEmpsByType method not implemented")
+}
+
+// UpdateEmp - Update an existing emp
+func (s *EmpApiService) UpdateEmp(ctx context.Context, emp openapi.Emp) (openapi.ImplResponse, error) {
+	// TODO - update UpdateEmp with the required logic for this service method.
+	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+
+	//TODO: Uncomment the next line to return response openapi.Response(200, Emp{}) or use other options such as http.Ok ...
+	//return openapi.Response(200, Emp{}), nil
+
+	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
+	//return openapi.Response(400, nil),nil
+
+	//TODO: Uncomment the next line to return response openapi.Response(404, {}) or use other options such as http.Ok ...
+	//return openapi.Response(404, nil),nil
+
+	//TODO: Uncomment the next line to return response openapi.Response(405, {}) or use other options such as http.Ok ...
+	//return openapi.Response(405, nil),nil
+
+	return openapi.Response(http.StatusNotImplemented, nil), errors.New("UpdateEmp method not implemented")
+}
+
+// UpdateEmpWithForm - Updates a emp in the store with form data
+func (s *EmpApiService) UpdateEmpWithForm(ctx context.Context, empId int64, name string, status string) (openapi.ImplResponse, error) {
+	// TODO - update UpdateEmpWithForm with the required logic for this service method.
+	// Add api_emp_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+
+	//TODO: Uncomment the next line to return response openapi.Response(405, {}) or use other options such as http.Ok ...
+	//return openapi.Response(405, nil),nil
+
+	return openapi.Response(http.StatusNotImplemented, nil), errors.New("UpdateEmpWithForm method not implemented")
 }

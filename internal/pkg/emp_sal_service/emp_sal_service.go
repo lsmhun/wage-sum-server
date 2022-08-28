@@ -23,7 +23,7 @@ func (s salDB) GetSalaryByEmpId(empId int64) decimal.Decimal {
 }
 
 func (s salDB) FindEmployeesByMgrId(mgrId int64) []openapi.Emp {
-	return db.FindEmployeesByMgrId(mgrId)
+	return nil //db.FindEmployeesByMgrId(mgrId)
 }
 
 // END: direct DB hiding

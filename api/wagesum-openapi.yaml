@@ -7,49 +7,248 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 0.2.0
 #servers:
 #- url: https://wagesum.org/v1
 tags:
 - name: emp
   description: Everything about employee
-  externalDocs:
-    description: Find out more
-    url: http://swagger.io
+- name: sal
+  description: Everything about salary
 paths:
-   /api/v1/emp/{empId}:
-    get:
+  /api/v1/emp:
+    put:
       tags:
-      - emp
-      summary: Find employee by ID
-      description: Returns a single employee
-      operationId: getEmpById
-      parameters:
-      - name: empId
-        in: path
-        description: ID of emp to return
+        - emp
+      summary: Update an existing emp
+      description: Update an existing emp by Id
+      operationId: updateEmp
+      requestBody:
+        description: Update an existent emp in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Emp'
         required: true
-        schema:
-          type: integer
-          format: int32
       responses:
-        200:
-          description: successful operation
+        '200':
+          description: Successful operation
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Emp'
             application/json:
               schema:
-                $ref: '#/components/schemas/Emp'
-        400:
+                $ref: '#/components/schemas/Emp'          
+        '400':
           description: Invalid ID supplied
-          content: {}
-        404:
-          description: Employee not found
-          content: {}
-      security:
-      - api_key: []
+        '404':
+          description: emp not found
+        '405':
+          description: Validation exception
+
+    post:
+      tags:
+        - emp
+      summary: Add a new emp to the store
+      description: Add a new emp to the store
+      operationId: addEmp
+      requestBody:
+        description: Create a new emp in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Emp'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Emp'          
+        '405':
+          description: Invalid input
+
+  /api/v1/emp/findByType:
+    get:
+      tags:
+        - emp
+      summary: Finds emps by type
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findEmpsByType
+      parameters:
+        - name: type
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: MANAGER
+            enum:
+              - MANAGER
+              - EMPLOYEE
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Emp'          
+        '400':
+          description: Invalid status value
+
+  /api/v1/emp/{empId}:
+    get:
+      tags:
+        - emp
+      summary: Find emp by ID
+      description: Returns a single emp
+      operationId: getEmpById
+      parameters:
+        - name: empId
+          in: path
+          description: ID of emp to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Emp'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: emp not found
+    post:
+      tags:
+        - emp
+      summary: Updates a emp in the store with form data
+      description: ''
+      operationId: updateEmpWithForm
+      parameters:
+        - name: empId
+          in: path
+          description: ID of emp that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: name
+          in: query
+          description: Name of emp that needs to be updated
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Status of emp that needs to be updated
+          schema:
+            type: string
+      responses:
+        '405':
+          description: Invalid input
+
+    delete:
+      tags:
+        - emp
+      summary: Deletes a emp
+      description: delete a emp
+      operationId: deleteEmp
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: empId
+          in: path
+          description: emp id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid emp value
+
+  /api/v1/sal/{empId}:
+    get:
+      tags:
+        - sal
+      summary: Find sal by ID
+      description: Returns a single emp
+      operationId: getSalByEmpId
+      parameters:
+        - name: empId
+          in: path
+          description: ID of emp 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string         
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: sal not found
+    post:
+      tags:
+        - sal
+      summary: Updates a sal in the store with form data
+      description: ''
+      operationId: updateSalWithForm
+      parameters:
+        - name: empId
+          in: path
+          description: ID of emp that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: value
+          in: query
+          description: Name of emp that needs to be updated
+          schema:
+            type: string
+      responses:
+        '405':
+          description: Invalid input
+  /api/v1/sal/wagesum/{empId}:
+    get:
+      tags:
+        - sal
+      summary: Find sum sal by manager ID
+      description: Returns a single emp
+      operationId: getWageSumByMgrId
+      parameters:
+        - name: empId
+          in: path
+          description: ID of emp 
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string       
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: sal not found
 components:
   schemas:
     Emp:
@@ -83,16 +282,3 @@ components:
           - deleted
       xml:
         name: Emp
-  securitySchemes:
-    empstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: http://empstore.swagger.io/oauth/dialog
-          scopes:
-            write:emps: modify emps in your account
-            read:emps: read your emps
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
