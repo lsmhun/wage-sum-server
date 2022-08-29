@@ -40,8 +40,8 @@ func (d *SalDb) DeleteByEmpId(empId int64) (Sal, error) {
 	if err1 != nil {
 		return sal, err1
 	}
-	d.db.Delete(&sal, 1)
-	return sal, d.err
+	err1 = d.db.Delete(&sal, 1).Error
+	return sal, err1
 }
 
 func (d *SalDb) CreateOrUpdateSalary(empId int64, value decimal.Decimal) (Sal, error) {
@@ -51,18 +51,15 @@ func (d *SalDb) CreateOrUpdateSalary(empId int64, value decimal.Decimal) (Sal, e
 			EmpId: empId,
 			Value: value,
 		}
-		d.db.Create(&sal)
+		result := d.db.FirstOrCreate(&sal, sal)
+		return sal, result.Error
 	}
-	d.db.Model(&sal).Update("value", value)
-	return sal, d.err
+	err1 = d.db.Model(&sal).Update("value", value).Error
+	return sal, err1
 }
 
 func (d *SalDb) findSalaryByEmpId(empId int64) (Sal, error) {
 	var sal Sal
-	d.db.First(&sal, "emp_id = ?", empId)
-	if d.err != nil {
-		//
-		return sal, d.err
-	}
-	return sal, d.err
+	err := d.db.First(&sal, "emp_id = ?", empId).Error
+	return sal, err
 }

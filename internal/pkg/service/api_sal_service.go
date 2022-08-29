@@ -17,6 +17,8 @@ import (
 
 	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
 	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
+	"github.com/shopspring/decimal"
+	"gorm.io/gorm"
 
 	empSalService "github.com/lsmhun/wage-sum-server/internal/pkg/emp_sal_service"
 )
@@ -38,46 +40,30 @@ func NewSalApiService(s db.SalDb, es empSalService.EmpSalService) openapi.SalApi
 }
 
 // GetSalByEmpId - Find sal by ID
-func (s *SalApiService) GetSalByEmpId(ctx context.Context, empId string) (openapi.ImplResponse, error) {
-	// TODO - update GetSalByEmpId with the required logic for this service method.
-	// Add api_sal_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response openapi.Response(200, string{}) or use other options such as http.Ok ...
-	//return openapi.Response(200, string{}), nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
-	//return openapi.Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(404, {}) or use other options such as http.Ok ...
-	//return openapi.Response(404, nil),nil
-
-	return openapi.Response(http.StatusNotImplemented, nil), errors.New("GetSalByEmpId method not implemented")
+func (s *SalApiService) GetSalByEmpId(ctx context.Context, empId int64) (openapi.ImplResponse, error) {
+	salValue := s.salDb.GetSalaryByEmpId(empId)
+	return openapi.Response(200, salValue), nil
 }
 
 // GetWageSumByMgrId - Find sum sal by manager ID
 func (s *SalApiService) GetWageSumByMgrId(ctx context.Context, empId int64) (openapi.ImplResponse, error) {
-	// TODO - update GetWageSumByMgrId with the required logic for this service method.
-	// Add api_sal_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response openapi.Response(200, string{}) or use other options such as http.Ok ...
-	//return openapi.Response(200, string{}), nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(400, {}) or use other options such as http.Ok ...
-	//return openapi.Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response openapi.Response(404, {}) or use other options such as http.Ok ...
-	//return openapi.Response(404, nil),nil
-
-	return openapi.Response(http.StatusNotImplemented, nil), errors.New("GetWageSumByMgrId method not implemented")
+	wageSumValue := s.empSalService.GetSumSalariesByMgrId(empId)
+	return openapi.Response(200, wageSumValue), nil
 }
 
 // UpdateSalWithForm - Updates a sal in the store with form data
 func (s *SalApiService) UpdateSalWithForm(ctx context.Context, empId int64, value string) (openapi.ImplResponse, error) {
-	// TODO - update UpdateSalWithForm with the required logic for this service method.
-	// Add api_sal_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response openapi.Response(405, {}) or use other options such as http.Ok ...
-	//return openapi.Response(405, nil),nil
-
-	return openapi.Response(http.StatusNotImplemented, nil), errors.New("UpdateSalWithForm method not implemented")
+	salary, errSal := decimal.NewFromString(value)
+	if errSal != nil {
+		return openapi.Response(http.StatusInternalServerError, nil), errSal
+	}
+	salById, err := s.salDb.CreateOrUpdateSalary(empId, salary)
+	if err == nil {
+		return openapi.Response(200, salById), nil
+	} else {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return openapi.Response(404, nil), nil
+		}
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
 }

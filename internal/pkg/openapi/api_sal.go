@@ -75,7 +75,11 @@ func (c *SalApiController) Routes() Routes {
 // GetSalByEmpId - Find sal by ID
 func (c *SalApiController) GetSalByEmpId(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	empIdParam := params["empId"]
+	empIdParam, err := parseInt64Parameter(params["empId"], true)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
 
 	result, err := c.service.GetSalByEmpId(r.Context(), empIdParam)
 	// If an error occurred, encode the error with the status code

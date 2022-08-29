@@ -1,6 +1,7 @@
 package wagesumapp
 
 import (
+	"errors"
 	"log"
 	"net/http"
 
@@ -9,6 +10,7 @@ import (
 	empSalService "github.com/lsmhun/wage-sum-server/internal/pkg/emp_sal_service"
 	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
 	service "github.com/lsmhun/wage-sum-server/internal/pkg/service"
+	"github.com/shopspring/decimal"
 
 	"gorm.io/gorm"
 )
@@ -23,6 +25,8 @@ func startServer() {
 	empDbRepo := initEmpDb(database, errr)
 	salDbRepo := initSalDb(database, errr)
 	empSalService := initEmpSalService(empDbRepo, salDbRepo)
+
+	initDbWithDemoData(empDbRepo, salDbRepo)
 
 	listeningHttpPort := myConfig.GetConfigValue("wagesum.http.service.port")
 	log.Printf("WageSum HTTP Server is starting on port :%s ...", listeningHttpPort)
@@ -67,4 +71,27 @@ func initSalDb(database *gorm.DB, err error) db.SalDb {
 func initEmpSalService(empDB db.EmpDb, salDB db.SalDb) empSalService.EmpSalService {
 	empSalService := empSalService.NewEmpSalService(&empDB, &salDB)
 	return empSalService
+}
+
+func initDbWithDemoData(empDB db.EmpDb, salDB db.SalDb) {
+	// This is just for demo purposes
+	_, errr := empDB.FindEmployeeById(1)
+	if errr != nil {
+		if errors.Is(errr, gorm.ErrRecordNotFound) {
+			empBoss := openapi.Emp{EmpId: 1, Status: "ACTIVE", Type: "MANAGER"}
+			empManager1 := openapi.Emp{EmpId: 2, MgrId: 1, Status: "ACTIVE", Type: "MANAGER"}
+			empClerk1 := openapi.Emp{EmpId: 3, MgrId: 2, Status: "ACTIVE", Type: "EMPLOYEE"}
+			empManager2 := openapi.Emp{EmpId: 4, MgrId: 1, Status: "ACTIVE", Type: "MANAGER"}
+			employees := [4]openapi.Emp{empBoss, empManager1, empClerk1, empManager2}
+			for _, emp := range employees {
+				_, pErr := empDB.CreateOrUpdateEmp(emp)
+				if pErr == nil {
+					var salValue int64 = 240_000 / emp.EmpId
+					salDB.CreateOrUpdateSalary(emp.EmpId, decimal.NewFromInt(salValue))
+				}
+			}
+		} else {
+			log.Println("Demo data has been already registered")
+		}
+	}
 }

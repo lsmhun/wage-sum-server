@@ -57,7 +57,7 @@ type EmpApiServicer interface {
 // while the service implementation can be ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
 type SalApiServicer interface { 
-	GetSalByEmpId(context.Context, string) (ImplResponse, error)
+	GetSalByEmpId(context.Context, int64) (ImplResponse, error)
 	GetWageSumByMgrId(context.Context, int64) (ImplResponse, error)
 	UpdateSalWithForm(context.Context, int64, string) (ImplResponse, error)
 }

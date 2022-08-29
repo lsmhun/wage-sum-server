@@ -48,18 +48,8 @@ func (d *EmpDb) FindEmployeesByType(empType string) ([]openapi.Emp, error) {
 }
 
 func (d *EmpDb) CreateOrUpdateEmp(emp openapi.Emp) (openapi.Emp, error) {
-	var emp1 openapi.Emp
-	var err1 error
-	if emp.EmpId != 0 {
-		emp1, err1 = d.FindEmployeeById(emp.EmpId)
-		if err1 != nil {
-			return emp1, err1
-		}
-		d.db.Model(&emp1).Updates(emp)
-	} else {
-		err1 = d.db.Create(&emp).Error
-	}
-	return emp1, err1
+	result := d.db.FirstOrCreate(&emp, emp)
+	return emp, result.Error
 }
 
 func (d *EmpDb) DeleteEmp(empId int64) (openapi.Emp, error) {
