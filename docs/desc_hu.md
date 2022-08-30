@@ -1,0 +1,1 @@
+# WageSum demo alkalmazás 

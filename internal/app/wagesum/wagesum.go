@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	myConfig "github.com/lsmhun/wage-sum-server/internal/pkg/configuration"
+	config "github.com/lsmhun/wage-sum-server/internal/pkg/configuration"
 	db "github.com/lsmhun/wage-sum-server/internal/pkg/db"
 	empSalService "github.com/lsmhun/wage-sum-server/internal/pkg/emp_sal_service"
 	openapi "github.com/lsmhun/wage-sum-server/internal/pkg/openapi"
@@ -15,20 +15,20 @@ import (
 	"gorm.io/gorm"
 )
 
-func WageSumApp() {
-	startServer()
+func WageSumApp(conf config.Config) {
+	startServer(conf)
 }
 
-func startServer() {
+func startServer(conf config.Config) {
 
-	database, errr := initializeDatabaseConnection()
+	database, errr := initializeDatabaseConnection(conf)
 	empDbRepo := initEmpDb(database, errr)
 	salDbRepo := initSalDb(database, errr)
 	empSalService := initEmpSalService(empDbRepo, salDbRepo)
 
 	initDbWithDemoData(empDbRepo, salDbRepo)
 
-	listeningHttpPort := myConfig.GetConfigValue("wagesum.http.service.port")
+	listeningHttpPort := conf.HttpServerPort
 	log.Printf("WageSum HTTP Server is starting on port :%s ...", listeningHttpPort)
 
 	// registering new controllers
@@ -40,8 +40,8 @@ func startServer() {
 
 }
 
-func initializeDatabaseConnection() (*gorm.DB, error) {
-	db, err := db.PostgresDatabaseSetup()
+func initializeDatabaseConnection(conf config.Config) (*gorm.DB, error) {
+	db, err := db.PostgresDatabaseSetup(conf)
 	if err != nil {
 		panic("Unable to connect to database")
 	}

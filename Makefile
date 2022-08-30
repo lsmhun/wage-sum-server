@@ -2,7 +2,7 @@ GOCMD=go
 GOTEST=$(GOCMD) test
 GOVET=$(GOCMD) vet
 BINARY_NAME=wagesum
-VERSION?=0.0.1
+VERSION?=0.0.2
 SERVICE_PORT?=3000
 DOCKER_REGISTRY?= #if set it should finished by /
 EXPORT_RESULT?=false # for CI please set EXPORT_RESULT to true
@@ -13,6 +13,8 @@ WHITE  := $(shell tput -Txterm setaf 7)
 CYAN   := $(shell tput -Txterm setaf 6)
 RESET  := $(shell tput -Txterm sgr0)
 
+CURRENTTIME := $(shell date +"%Y%m%d%H%M%S")
+
 .PHONY: all test build vendor
 
 all: help
@@ -20,7 +22,7 @@ all: help
 ## Build:
 build: ## Build your project and put the output binary in out/bin/
 	mkdir -p out/bin
-	GO111MODULE=on $(GOCMD) build -mod vendor -o out/bin/$(BINARY_NAME) ./cmd/wagesum
+	GO111MODULE=on $(GOCMD) build -mod vendor -o out/bin/$(BINARY_NAME) -ldflags "-X main.version=$(VERSION) -X main.build=$(CURRENTTIME)" ./cmd/wagesum
 
 clean: ## Remove build related file
 	rm -fr ./bin
