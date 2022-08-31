@@ -49,9 +49,10 @@ jobs:
           name: Run coverage
           command: |
             make coverage
-      - run:
-          name: Run tests and collect coverage
-          command: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+      #- run:
+      #    name: Run tests and collect coverage
+      #    command: |
+      #      go test -race -coverprofile=coverage.txt -covermode=atomic ./...
       - codecov/upload
   lint:
     parallelism: 2
