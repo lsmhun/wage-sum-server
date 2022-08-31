@@ -1,4 +1,6 @@
 # Wagesum demo appication
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flsmhun%2Fwage-sum-server.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Flsmhun%2Fwage-sum-server?ref=badge_shield)
+
 Demo microservice with GO programming language. It can calculete the sum of salaries 
 under manager recursively. It supports CRUD functionality for employees and salaries.
 
@@ -30,3 +32,6 @@ This application can be configured runtime with environment variables.
 ## Documentation
 * [English documentation](docs/desc_en.md)
 * [Hungarian documentation](docs/desc_hu.md)
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flsmhun%2Fwage-sum-server.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Flsmhun%2Fwage-sum-server?ref=badge_large)
