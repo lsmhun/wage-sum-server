@@ -25,4 +25,8 @@ This application can be configured runtime with environment variables.
 | WAGESUM_DB_NAME           | string         | 127.0.0.1        |
 | WAGESUM_DB_USERNAME       | string         | postgres         |
 | WAGESUM_DB_PASSWORD       | string         | mysecretpassword |
-| WAGESUM_HTTP_SERVER_PORT  | centered       | 3000             |
+| WAGESUM_HTTP_SERVER_PORT  | string         | 3000             |
+
+## Documentation
+* [English documentation](docs/desc_en.md)
+* [Hungarian documentation](docs/desc_hu.md)
