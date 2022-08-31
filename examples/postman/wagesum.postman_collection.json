@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "758f71c4-77eb-47ec-b38a-3bfaa4ae12ee",
+		"name": "wagesum",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Find employee by empId=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/emp/1",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"emp",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find employees by mgrId=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/emp/1",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"emp",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find salary by empId=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/sal/1",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sal",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[error] emp not found 404",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/emp/12345678",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"emp",
+						"12345678"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user with empId=100",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"empId\": 100,\r\n    \"mgrId\": 1,\r\n    \"type\": \"EMPLOYEE\",\r\n    \"status\": \"ACTIVE\",\r\n    \"firstName\": \"First\",\r\n    \"lastName\": \"Last\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/emp",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"emp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find employee by empId=100",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/emp/100",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"emp",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create salary with empId=100",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/sal/100?value=100000",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sal",
+						"100"
+					],
+					"query": [
+						{
+							"key": "value",
+							"value": "100000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find salary by empId=100",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/sal/100",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sal",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete employee by empId=100",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/emp/100",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"emp",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete salary by empId=100",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/sal/100",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sal",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find wagesum by mgrId=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/v1/sal/wagesum/1",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sal",
+						"wagesum",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
