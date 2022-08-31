@@ -55,7 +55,7 @@ func (d *EmpDb) CreateOrUpdateEmp(emp openapi.Emp) (openapi.Emp, error) {
 func (d *EmpDb) DeleteEmp(empId int64) (openapi.Emp, error) {
 	var emp1, err1 = d.FindEmployeeById(empId)
 	if err1 != nil {
-		d.db.Delete(&emp1)
+		err1 = d.db.Delete(&emp1, emp1.Id).Error
 	}
-	return emp1, d.err
+	return emp1, err1
 }

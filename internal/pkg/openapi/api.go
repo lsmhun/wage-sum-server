@@ -32,6 +32,7 @@ type EmpApiRouter interface {
 // The SalApiRouter implementation should parse necessary information from the http request,
 // pass the data to a SalApiServicer to perform the required actions, then write the service results to the http response.
 type SalApiRouter interface { 
+	DeleteSal(http.ResponseWriter, *http.Request)
 	GetSalByEmpId(http.ResponseWriter, *http.Request)
 	GetWageSumByMgrId(http.ResponseWriter, *http.Request)
 	UpdateSalWithForm(http.ResponseWriter, *http.Request)
@@ -57,6 +58,7 @@ type EmpApiServicer interface {
 // while the service implementation can be ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
 type SalApiServicer interface { 
+	DeleteSal(context.Context, int64) (ImplResponse, error)
 	GetSalByEmpId(context.Context, int64) (ImplResponse, error)
 	GetWageSumByMgrId(context.Context, int64) (ImplResponse, error)
 	UpdateSalWithForm(context.Context, int64, string) (ImplResponse, error)

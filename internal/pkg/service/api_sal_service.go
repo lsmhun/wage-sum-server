@@ -67,3 +67,12 @@ func (s *SalApiService) UpdateSalWithForm(ctx context.Context, empId int64, valu
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 }
+
+// DeleteSal - Deletes a sal
+func (s *SalApiService) DeleteSal(ctx context.Context, empId int64) (openapi.ImplResponse, error) {
+	_, err := s.salDb.DeleteByEmpId(empId)
+	if err != nil {
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+	return openapi.Response(200, empId), nil
+}

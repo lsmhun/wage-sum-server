@@ -28,8 +28,8 @@ func NewSalDb(database *gorm.DB, e error) SalDb {
 
 func (d *SalDb) GetSalaryByEmpId(empId int64) decimal.Decimal {
 	var sal Sal
-	d.db.First(&sal, "emp_id = ?", empId)
-	if d.err != nil {
+	err := d.db.First(&sal, "emp_id = ?", empId).Error
+	if err != nil {
 		return decimal.Decimal{}
 	}
 	return sal.Value
@@ -40,7 +40,7 @@ func (d *SalDb) DeleteByEmpId(empId int64) (Sal, error) {
 	if err1 != nil {
 		return sal, err1
 	}
-	err1 = d.db.Delete(&sal, 1).Error
+	err1 = d.db.Delete(&sal, sal.Id).Error
 	return sal, err1
 }
 

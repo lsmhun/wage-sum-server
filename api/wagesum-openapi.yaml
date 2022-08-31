@@ -224,6 +224,23 @@ paths:
       responses:
         '405':
           description: Invalid input
+    delete:
+      tags:
+        - sal
+      summary: Deletes a sal
+      description: delete a sal
+      operationId: deleteSal
+      parameters:
+        - name: empId
+          in: path
+          description: emp id to delete salary
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid sal value
   /api/v1/sal/wagesum/{empId}:
     get:
       tags:
