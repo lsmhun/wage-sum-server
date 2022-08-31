@@ -13,20 +13,20 @@ package openapi
 import (
 	"encoding/json"
 	"errors"
-	"github.com/gorilla/mux"
-	"io/ioutil"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 // A Route defines the parameters for an api endpoint
 type Route struct {
-	Name		string
-	Method	  string
-	Pattern	 string
+	Name        string
+	Method      string
+	Pattern     string
 	HandlerFunc http.HandlerFunc
 }
 
@@ -111,21 +111,21 @@ func readFileHeaderToTempFile(fileHeader *multipart.FileHeader) (*os.File, error
 
 	defer formFile.Close()
 
-	fileBytes, err := ioutil.ReadAll(formFile)
+	fileBytes, err := io.ReadAll(formFile)
 	if err != nil {
 		return nil, err
 	}
 
-	file, err := ioutil.TempFile("", fileHeader.Filename)
+	file, err := os.CreateTemp("", fileHeader.Filename)
 	if err != nil {
 		return nil, err
 	}
 
 	defer file.Close()
 
-	file.Write(fileBytes)
+	_, err1 := file.Write(fileBytes)
 
-	return file, nil
+	return file, err1
 }
 
 // parseInt64Parameter parses a string parameter to an int64.
@@ -141,6 +141,7 @@ func parseInt64Parameter(param string, required bool) (int64, error) {
 	return strconv.ParseInt(param, 10, 64)
 }
 
+/*
 // parseInt32Parameter parses a string parameter to an int32.
 func parseInt32Parameter(param string, required bool) (int32, error) {
 	if param == "" {
@@ -216,3 +217,4 @@ func parseInt32ArrayParameter(param, delim string, required bool) ([]int32, erro
 
 	return ints, nil
 }
+*/

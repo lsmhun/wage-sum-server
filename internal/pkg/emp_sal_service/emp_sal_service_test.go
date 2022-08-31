@@ -64,7 +64,7 @@ func TestGetSalaryByEmpId(t *testing.T) {
 	var empId int64 = 1
 
 	// define expected result
-	var expected decimal.Decimal = decimal.NewFromFloat(3.0)
+	expected := decimal.NewFromFloat(3.0)
 
 	//mocking
 	getSalaryByEmpIdMock = func(empId int64) decimal.Decimal {
@@ -91,9 +91,7 @@ func TestGetSumSalariesByMgrId(t *testing.T) {
 	//       Clerk1 - id=3
 	//     Manager2 - id=4
 
-	// define expected result
-	var expected decimal.Decimal = decimal.NewFromFloat(3.0)
-
+	var expected decimal.Decimal
 	//mocking
 	getSalaryByEmpIdMock = func(empId int64) decimal.Decimal {
 		return decimal.NewFromInt(empId)

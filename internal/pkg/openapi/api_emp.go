@@ -20,7 +20,7 @@ import (
 
 // EmpApiController binds http requests to an api service and writes the service results to the http response
 type EmpApiController struct {
-	service EmpApiServicer
+	service      EmpApiServicer
 	errorHandler ErrorHandler
 }
 
@@ -50,7 +50,7 @@ func NewEmpApiController(s EmpApiServicer, opts ...EmpApiOption) Router {
 
 // Routes returns all the api routes for the EmpApiController
 func (c *EmpApiController) Routes() Routes {
-	return Routes{ 
+	return Routes{
 		{
 			"AddEmp",
 			strings.ToUpper("Post"),
@@ -110,8 +110,11 @@ func (c *EmpApiController) AddEmp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err = EncodeJSONResponse(result.Body, &result.Code, w)
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
 }
 
 // DeleteEmp - Deletes a emp
@@ -131,8 +134,11 @@ func (c *EmpApiController) DeleteEmp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err = EncodeJSONResponse(result.Body, &result.Code, w)
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
 }
 
 // FindEmpsByType - Finds emps by type
@@ -146,8 +152,11 @@ func (c *EmpApiController) FindEmpsByType(w http.ResponseWriter, r *http.Request
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err = EncodeJSONResponse(result.Body, &result.Code, w)
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
 }
 
 // GetEmpById - Find emp by ID
@@ -166,8 +175,11 @@ func (c *EmpApiController) GetEmpById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err = EncodeJSONResponse(result.Body, &result.Code, w)
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
 }
 
 // UpdateEmp - Update an existing emp
@@ -190,8 +202,11 @@ func (c *EmpApiController) UpdateEmp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err = EncodeJSONResponse(result.Body, &result.Code, w)
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
 }
 
 // UpdateEmpWithForm - Updates a emp in the store with form data
@@ -213,6 +228,9 @@ func (c *EmpApiController) UpdateEmpWithForm(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err = EncodeJSONResponse(result.Body, &result.Code, w)
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
 }
