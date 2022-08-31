@@ -1,3 +1,7 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/lsmhun/wage-sum-server/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/lsmhun/wage-sum-server/tree/main)
+[![codecov](https://codecov.io/gh/lsmhun/wage-sum-server/branch/main/graph/badge.svg?token=YM7YQJY8O9)](https://codecov.io/gh/lsmhun/wage-sum-server)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flsmhun%2Fwage-sum-server.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Flsmhun%2Fwage-sum-server?ref=badge_shield)
+
 # Wagesum demo appication
 Demo microservice with GO programming language. It can calculete the sum of salaries 
 under manager recursively. It supports CRUD functionality for employees and salaries.
@@ -30,3 +34,6 @@ This application can be configured runtime with environment variables.
 ## Documentation
 * [English documentation](docs/desc_en.md)
 * [Hungarian documentation](docs/desc_hu.md)
+
+
+
