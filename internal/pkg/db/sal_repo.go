@@ -22,7 +22,10 @@ func NewSalDb(database *gorm.DB, e error) SalDb {
 		err: e,
 	}
 	// Migrate the schema
-	mySalDB.db.AutoMigrate(&Sal{})
+	err := mySalDB.db.AutoMigrate(&Sal{})
+	if err != nil {
+		panic("Unable to run AutoMigrate on SalDb")
+	}
 	return mySalDB
 }
 

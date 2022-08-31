@@ -24,7 +24,10 @@ func NewEmpDb(database *gorm.DB, e error) EmpDb {
 		err: e,
 	}
 	// Migrate the schema
-	myEmpDB.db.AutoMigrate(&openapi.Emp{})
+	err := myEmpDB.db.AutoMigrate(&openapi.Emp{})
+	if err != nil {
+		panic("Unable to run AutoMigrate on SalDb")
+	}
 	return myEmpDB
 }
 

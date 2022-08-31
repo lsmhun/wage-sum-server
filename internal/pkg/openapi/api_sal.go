@@ -94,8 +94,11 @@ func (c *SalApiController) DeleteSal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err1 := EncodeJSONResponse(result.Body, &result.Code, w)
+	if err1 != nil {
+		c.errorHandler(w, r, err1, &result)
+		return
+	}
 }
 
 // GetSalByEmpId - Find sal by ID
@@ -114,8 +117,11 @@ func (c *SalApiController) GetSalByEmpId(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err1 := EncodeJSONResponse(result.Body, &result.Code, w)
+	if err1 != nil {
+		c.errorHandler(w, r, err1, &result)
+		return
+	}
 }
 
 // GetWageSumByMgrId - Find sum sal by manager ID
@@ -134,8 +140,11 @@ func (c *SalApiController) GetWageSumByMgrId(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err1 := EncodeJSONResponse(result.Body, &result.Code, w)
+	if err1 != nil {
+		c.errorHandler(w, r, err1, &result)
+		return
+	}
 }
 
 // UpdateSalWithForm - Updates a sal in the store with form data
@@ -156,6 +165,9 @@ func (c *SalApiController) UpdateSalWithForm(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
-
+	err1 := EncodeJSONResponse(result.Body, &result.Code, w)
+	if err1 != nil {
+		c.errorHandler(w, r, err1, &result)
+		return
+	}
 }
