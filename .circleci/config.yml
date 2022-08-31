@@ -51,7 +51,7 @@ jobs:
             make coverage
       - run:
           name: Run tests and collect coverage
-          command: go test -race -coverprofile=coverage.txt -covermode=atomic
+          command: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
       - codecov/upload
   lint:
     parallelism: 2
