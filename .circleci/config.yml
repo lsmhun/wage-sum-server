@@ -29,17 +29,22 @@ jobs:
             - "/go/pkg/mod"
             - ~/repo/vendor
       - run:
-          name: Run tests
-          command: |
-            mkdir -p /tmp/test-reports
-            gotestsum --junitfile /tmp/test-reports/unit-tests.xml
-      - store_test_results:
-          path: /tmp/test-reports
-      - run:
           name: Build with gmake
           command: |
             cd ~/repo
             make build
+      - run:
+          name: Run tests
+          command: |
+            mkdir -p /tmp/test-reports
+            gotestsum --junitfile /tmp/test-reports/unit-tests.xml
+      - run:
+          name: Run coverage
+          command: |
+            make coverage
+      - store_test_results:
+          path: /tmp/test-reports
+      
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
