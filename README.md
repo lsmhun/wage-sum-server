@@ -1,5 +1,5 @@
 # Wagesum demo appication
-Demo microservice with GO programming language. It can calculete the sum of salaries 
+Demo microservice with GO programming language. It can calculate the sum of salaries 
 under manager recursively. It supports CRUD functionality for employees and salaries.
 
 REST interface details are available [wagesum-openapi.yaml](./api/wagesum-openapi.yaml) 
@@ -11,7 +11,7 @@ You need gmake and go 1.19 installed. (1.17+)
 ```shell
 docker run -p 5432:5432 --name wagesum-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 make build
-./out/wagesum
+./out/bin/wagesum
 ```
 
 ## Configuration
