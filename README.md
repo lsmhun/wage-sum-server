@@ -23,10 +23,10 @@ This application can be configured runtime with environment variables.
 
 | Env var name              | Type           | Default value    |
 | ------------------------- | -------------- | ----------------:|
-| WAGESUM_DB_TYPE           | string         | 127.0.0.1        |
-| WAGESUM_DB_HOST           | string         | 5432             |
-| WAGESUM_DB_PORT           | string         | wagesum          |
-| WAGESUM_DB_NAME           | string         | 127.0.0.1        |
+| WAGESUM_DB_TYPE           | string         | postgres         |
+| WAGESUM_DB_HOST           | string         | 127.0.0.1        |
+| WAGESUM_DB_PORT           | string         | 5432             |
+| WAGESUM_DB_NAME           | string         | wagesum          |
 | WAGESUM_DB_USERNAME       | string         | postgres         |
 | WAGESUM_DB_PASSWORD       | string         | mysecretpassword |
 | WAGESUM_HTTP_SERVER_PORT  | string         | 3000             |
