@@ -31,7 +31,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{wagesum_base_url}}/api/v1/emp/1",
+					"raw": "{{wagesum_base_url}}/api/v1/emp/findByMgrId?mgrId=1",
 					"host": [
 						"{{wagesum_base_url}}"
 					],
@@ -39,7 +39,13 @@
 						"api",
 						"v1",
 						"emp",
-						"1"
+						"findByMgrId"
+					],
+					"query": [
+						{
+							"key": "mgrId",
+							"value": "1"
+						}
 					]
 				}
 			},
@@ -244,6 +250,24 @@
 						"sal",
 						"wagesum",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Monitoring - health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{wagesum_base_url}}/api/health",
+					"host": [
+						"{{wagesum_base_url}}"
+					],
+					"path": [
+						"api",
+						"health"
 					]
 				}
 			},

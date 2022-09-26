@@ -66,6 +66,16 @@ func (s *EmpApiService) DeleteEmp(ctx context.Context, empId int64, apiKey strin
 	return openapi.Response(200, empId), nil
 }
 
+// FindEmpsByMgrId - Finds emps by mgrId
+func (s *EmpApiService) FindEmpsByMgrId(ctx context.Context, mgrId int64) (openapi.ImplResponse, error) {
+	emps, err := s.empDb.FindEmployeesByMgrId(mgrId)
+	if err == nil {
+		return openapi.Response(200, emps), nil
+	} else {
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+}
+
 // FindEmpsByType - Finds emps by type
 func (s *EmpApiService) FindEmpsByType(ctx context.Context, type_ string) (openapi.ImplResponse, error) {
 	emps, err := s.empDb.FindEmployeesByType(type_)
@@ -78,21 +88,6 @@ func (s *EmpApiService) FindEmpsByType(ctx context.Context, type_ string) (opena
 
 // UpdateEmp - Update an existing emp
 func (s *EmpApiService) UpdateEmp(ctx context.Context, emp openapi.Emp) (openapi.ImplResponse, error) {
-	empById, err := s.empDb.CreateOrUpdateEmp(emp)
-	if err == nil {
-		return openapi.Response(200, empById), nil
-	} else {
-		return openapi.Response(http.StatusInternalServerError, nil), err
-	}
-}
-
-// UpdateEmpWithForm - Updates a emp in the store with form data
-func (s *EmpApiService) UpdateEmpWithForm(ctx context.Context, empId int64, name string, status string) (openapi.ImplResponse, error) {
-	emp := openapi.Emp{
-		EmpId:    empId,
-		LastName: name,
-		Status:   status,
-	}
 	empById, err := s.empDb.CreateOrUpdateEmp(emp)
 	if err == nil {
 		return openapi.Response(200, empById), nil

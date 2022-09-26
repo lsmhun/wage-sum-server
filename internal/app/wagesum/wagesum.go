@@ -35,6 +35,7 @@ func startServer(conf config.Config) {
 	router := openapi.NewRouter(
 		empApiController(empDbRepo),
 		salApiController(salDbRepo, empSalService),
+		monitoringController(),
 	)
 	log.Fatal(http.ListenAndServe(":"+listeningHttpPort, router))
 
@@ -97,4 +98,10 @@ func initDbWithDemoData(empDB db.EmpDb, salDB db.SalDb) {
 			log.Println("Demo data has been already registered")
 		}
 	}
+}
+
+func monitoringController() openapi.Router {
+	monitoringApiService := service.NewMonitoringApiService()
+	monitoringApiController := openapi.NewMonitoringApiController(monitoringApiService)
+	return monitoringApiController
 }

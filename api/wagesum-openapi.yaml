@@ -7,7 +7,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.2.0
+  version: 0.3.0
 #servers:
 #- url: https://wagesum.org/v1
 tags:
@@ -15,6 +15,8 @@ tags:
   description: Everything about employee
 - name: sal
   description: Everything about salary
+- name: monitoring
+  description: Monitoring interface
 paths:
   /api/v1/emp:
     put:
@@ -114,6 +116,37 @@ paths:
         '400':
           description: Invalid status value
 
+  /api/v1/emp/findByMgrId:
+    get:
+      tags:
+        - emp
+      summary: Finds emps by mgrId
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findEmpsByMgrId
+      parameters:
+        - name: mgrId
+          in: query
+          description: Manager id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Emp'
+                  example:
+                    exampleEmployee:
+                      $ref: '#/components/examples/exampleEmployee' 
+        '400':
+          description: Invalid status value
+
   /api/v1/emp/{empId}:
     get:
       tags:
@@ -144,34 +177,6 @@ paths:
           description: Invalid ID supplied
         '404':
           description: emp not found
-    post:
-      tags:
-        - emp
-      summary: Updates a emp in the store with form data
-      description: ''
-      operationId: updateEmpWithForm
-      parameters:
-        - name: empId
-          in: path
-          description: ID of emp that needs to be updated
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 10
-        - name: name
-          in: query
-          description: Name of emp that needs to be updated
-          schema:
-            type: string
-        - name: status
-          in: query
-          description: Status of emp that needs to be updated
-          schema:
-            type: string
-      responses:
-        '405':
-          description: Invalid input
 
     delete:
       tags:
@@ -295,6 +300,23 @@ paths:
           description: Invalid ID supplied
         '404':
           description: sal not found
+  
+  /api/health:
+    get:
+      tags:
+        - monitoring
+      summary: Health endpoint
+      description: Returns a health status
+      operationId: health
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
 components:
   schemas:
     Emp:
