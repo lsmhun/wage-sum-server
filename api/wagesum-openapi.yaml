@@ -328,6 +328,8 @@ components:
         empId:
           type: integer
           format: int64
+        userName: 
+          type: string
         firstName:
           type: string
         lastName:
@@ -356,6 +358,7 @@ components:
       value:
         id: 100
         empId: 10
+        userName: "johndoe"
         firstName: "John"
         lastName: "Doe"
         mgrId: 1

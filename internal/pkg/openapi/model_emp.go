@@ -16,6 +16,8 @@ type Emp struct {
 
 	EmpId int64 `json:"empId,omitempty"`
 
+	UserName string `json:"userName,omitempty"`
+
 	FirstName string `json:"firstName,omitempty"`
 
 	LastName string `json:"lastName,omitempty"`
