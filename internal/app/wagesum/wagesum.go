@@ -86,7 +86,7 @@ func initDbWithDemoData(empDB db.EmpDb, salDB db.SalDb) {
 			empClerk1 := openapi.Emp{EmpId: 3, MgrId: 2, Status: "ACTIVE", Type: "EMPLOYEE", UserName: "clerk1",
 				FirstName: "John", LastName: "Wick"}
 			empManager2 := openapi.Emp{EmpId: 4, MgrId: 1, Status: "ACTIVE", Type: "MANAGER", UserName: "man2",
-				FirstName: "John", LastName: "Wick"}
+				FirstName: "Edward", LastName: "Ballack"}
 			employees := [4]openapi.Emp{empBoss, empManager1, empClerk1, empManager2}
 			for _, emp := range employees {
 				_, pErr := empDB.CreateOrUpdateEmp(emp)
