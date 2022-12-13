@@ -347,9 +347,9 @@ components:
           type: string
           description: Employee Status
           enum:
-          - active
-          - inactive
-          - deleted
+          - ACTIVE
+          - INACTIVE
+          - DELETED
       xml:
         name: Emp
   examples:
@@ -363,5 +363,5 @@ components:
         lastName: "Doe"
         mgrId: 1
         type: "EMPLOYEE"
-        status: "active"
+        status: "ACTIVE"
 
