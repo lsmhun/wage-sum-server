@@ -79,10 +79,14 @@ func initDbWithDemoData(empDB db.EmpDb, salDB db.SalDb) {
 	_, errr := empDB.FindEmployeeById(1)
 	if errr != nil {
 		if errors.Is(errr, gorm.ErrRecordNotFound) {
-			empBoss := openapi.Emp{EmpId: 1, Status: "ACTIVE", Type: "MANAGER", UserName: "boss"}
-			empManager1 := openapi.Emp{EmpId: 2, MgrId: 1, Status: "ACTIVE", Type: "MANAGER", UserName: "man1"}
-			empClerk1 := openapi.Emp{EmpId: 3, MgrId: 2, Status: "ACTIVE", Type: "EMPLOYEE", UserName: "clerk1"}
-			empManager2 := openapi.Emp{EmpId: 4, MgrId: 1, Status: "ACTIVE", Type: "MANAGER", UserName: "man2"}
+			empBoss := openapi.Emp{EmpId: 1, Status: "ACTIVE", Type: "MANAGER", UserName: "boss",
+				FirstName: "Mark", LastName: "Bosma"}
+			empManager1 := openapi.Emp{EmpId: 2, MgrId: 1, Status: "ACTIVE", Type: "MANAGER", UserName: "man1",
+				FirstName: "Vivien", LastName: "Manger"}
+			empClerk1 := openapi.Emp{EmpId: 3, MgrId: 2, Status: "ACTIVE", Type: "EMPLOYEE", UserName: "clerk1",
+				FirstName: "John", LastName: "Wick"}
+			empManager2 := openapi.Emp{EmpId: 4, MgrId: 1, Status: "ACTIVE", Type: "MANAGER", UserName: "man2",
+				FirstName: "John", LastName: "Wick"}
 			employees := [4]openapi.Emp{empBoss, empManager1, empClerk1, empManager2}
 			for _, emp := range employees {
 				_, pErr := empDB.CreateOrUpdateEmp(emp)
