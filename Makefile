@@ -4,7 +4,7 @@ GOVET=$(GOCMD) vet
 BINARY_NAME=wagesum
 VERSION?=0.0.4
 SERVICE_PORT?=3000
-DOCKER_REGISTRY?=registry.hub.docker.com/lsmaster/ #if set it should finished by /
+DOCKER_REGISTRY?=docker.io/lsmaster/ #if set it should finished by /
 EXPORT_RESULT?=false # for CI please set EXPORT_RESULT to true
 
 GREEN  := $(shell tput -Txterm setaf 2)
