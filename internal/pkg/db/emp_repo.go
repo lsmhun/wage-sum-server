@@ -66,7 +66,9 @@ func (d *EmpDb) CreateOrUpdateEmp(emp openapi.Emp) (openapi.Emp, error) {
 		return emp1, res1.Error
 	} else {
 		var iid = d.makeTimestamp()
-		emp.EmpId = iid
+		if emp.EmpId == 0 {
+			emp.EmpId = iid
+		}
 		emp.Id = iid
 		var res2 = d.db.FirstOrCreate(&emp, emp)
 		return emp, res2.Error

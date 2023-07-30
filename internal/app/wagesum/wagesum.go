@@ -93,7 +93,7 @@ func initDbWithDemoData(empDB db.EmpDb, salDB db.SalDb) {
 				if pErr == nil {
 					var salValue int64 = 240_000 / emp.EmpId
 					_, sErr := salDB.CreateOrUpdateSalary(emp.EmpId, decimal.NewFromInt(salValue))
-					if sErr == nil {
+					if sErr != nil {
 						log.Printf("Demo salary for empId=%d is not upserted", emp.EmpId)
 					}
 				}
