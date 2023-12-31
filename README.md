@@ -13,7 +13,7 @@ REST interface details are available [wagesum-openapi.yaml](./api/wagesum-openap
 You need gmake and go 1.19 installed. (1.17+)
 
 ```shell
-docker run -p 5432:5432 --name wagesum-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+docker run -p 5432:5432 --name wagesum-postgres -e POSTGRES_DB=wagesum -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 make build
 ./out/bin/wagesum
 ```
