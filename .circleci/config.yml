@@ -76,7 +76,7 @@ jobs:
       - run:
           name: Run golangci-lint
           command: |
-             golangci-lint run --deadline=65s
+             golangci-lint run --timeout=65s
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
